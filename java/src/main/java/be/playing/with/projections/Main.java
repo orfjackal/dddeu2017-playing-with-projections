@@ -4,6 +4,7 @@ import be.playing.with.projections.infra.FileEventStreamProvider;
 import be.playing.with.projections.model.EventStreamProvider;
 import be.playing.with.projections.model.projections.CountEventsProjection;
 import be.playing.with.projections.model.projections.DistinctTypesProjection;
+import be.playing.with.projections.model.projections.HowManyRegisteredProjection;
 
 class Main {
 
@@ -19,6 +20,11 @@ class Main {
         }
         {
             DistinctTypesProjection projection = new DistinctTypesProjection();
+            System.out.println(projection.buildResultMessage(
+                    projection.project(streamProvider.loadResponses(getStream(args)))));
+        }
+        {
+            HowManyRegisteredProjection projection = new HowManyRegisteredProjection();
             System.out.println(projection.buildResultMessage(
                     projection.project(streamProvider.loadResponses(getStream(args)))));
         }
