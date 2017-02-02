@@ -1,11 +1,16 @@
 package be.playing.with.projections;
 
 import be.playing.with.projections.infra.FileEventStreamProvider;
+import be.playing.with.projections.model.Event;
 import be.playing.with.projections.model.EventStreamProvider;
+import be.playing.with.projections.model.Projection;
 import be.playing.with.projections.model.projections.CountEventsProjection;
 import be.playing.with.projections.model.projections.DistinctTypesProjection;
 import be.playing.with.projections.model.projections.HowManyRegisteredPerMonthProjection;
 import be.playing.with.projections.model.projections.HowManyRegisteredProjection;
+import be.playing.with.projections.model.projections.MostPopularQuizzesProjection;
+
+import java.util.List;
 
 class Main {
 
@@ -13,27 +18,21 @@ class Main {
     // Switch between File based access and Remote rest here!
     EventStreamProvider streamProvider = new FileEventStreamProvider();
 //    EventStreamProvider streamProvider = new RestEventStreamProvider();
+    List<Event> events = streamProvider.loadResponses(getStream(args));
 
-    {
-      CountEventsProjection projection = new CountEventsProjection();
-      System.out.println(projection.buildResultMessage(
-          projection.project(streamProvider.loadResponses(getStream(args)))));
-    }
-    {
-      DistinctTypesProjection projection = new DistinctTypesProjection();
-      System.out.println(projection.buildResultMessage(
-          projection.project(streamProvider.loadResponses(getStream(args)))));
-    }
-    {
-      HowManyRegisteredProjection projection = new HowManyRegisteredProjection();
-      System.out.println(projection.buildResultMessage(
-          projection.project(streamProvider.loadResponses(getStream(args)))));
-    }
-    {
-      HowManyRegisteredPerMonthProjection projection = new HowManyRegisteredPerMonthProjection();
-      System.out.println(projection.buildResultMessage(
-          projection.project(streamProvider.loadResponses(getStream(args)))));
-    }
+    run(events, new CountEventsProjection());
+    run(events, new DistinctTypesProjection());
+    run(events, new HowManyRegisteredProjection());
+    run(events, new HowManyRegisteredPerMonthProjection());
+    run(events, new MostPopularQuizzesProjection());
+  }
+
+  private static <T> void run(List<Event> events, Projection<T> projection) {
+    System.out.println();
+    System.out.println("     " + projection.getClass().getSimpleName());
+    T result = projection.project(events);
+    String resultMessage = projection.buildResultMessage(result);
+    System.out.println(resultMessage);
   }
 
   private static String getStream(String[] args) {
