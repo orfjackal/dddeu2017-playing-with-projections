@@ -11,6 +11,7 @@ import be.playing.with.projections.model.projections.HowManyRegisteredPerMonthPr
 import be.playing.with.projections.model.projections.HowManyRegisteredProjection;
 import be.playing.with.projections.model.projections.MostPopularQuizzesInMonthProjection;
 import be.playing.with.projections.model.projections.MostPopularQuizzesProjection;
+import be.playing.with.projections.model.projections.TrulyActivePlayersInMonthProjection;
 
 import java.time.YearMonth;
 import java.util.List;
@@ -33,6 +34,7 @@ class Main {
     run(events, new MostPopularQuizzesProjection());
     run(events, new MostPopularQuizzesInMonthProjection(YearMonth.of(2016, JULY)));
     run(events, new ActivePlayersInMonthProjection(YearMonth.of(2016, JUNE)));
+    run(events, new TrulyActivePlayersInMonthProjection(YearMonth.of(2016, JUNE)));
   }
 
   private static <T> void run(List<Event> events, Projection<T> projection) {
