@@ -5,6 +5,7 @@ import be.playing.with.projections.model.Event;
 import be.playing.with.projections.model.EventStreamProvider;
 import be.playing.with.projections.model.Projection;
 import be.playing.with.projections.model.projections.ActivePlayersInMonthProjection;
+import be.playing.with.projections.model.projections.BotsWhoAnswerQuicklyProjection;
 import be.playing.with.projections.model.projections.CountEventsProjection;
 import be.playing.with.projections.model.projections.DistinctTypesProjection;
 import be.playing.with.projections.model.projections.HowManyRegisteredPerMonthProjection;
@@ -35,6 +36,7 @@ class Main {
     run(events, new MostPopularQuizzesInMonthProjection(YearMonth.of(2016, JULY)));
     run(events, new ActivePlayersInMonthProjection(YearMonth.of(2016, JUNE)));
     run(events, new TrulyActivePlayersInMonthProjection(YearMonth.of(2016, JUNE)));
+    run(events, new BotsWhoAnswerQuicklyProjection());
   }
 
   private static <T> void run(List<Event> events, Projection<T> projection) {
